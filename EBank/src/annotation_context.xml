@@ -1,0 +1,84 @@
+<?xml  version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+		
+	
+<bean id="loginService" class="com.slokam.ebank.service.LoginService">
+    <property name="loginDAO" ref="loginD" />
+</bean>    
+
+<bean id="loginD" class="com.slokam.ebank.dao.LoginDAO">
+    <property name="ds" ref="bds" />
+    <property name="sf" ref="sessionFactory" />
+    <property name="jdbcTemplate" ref="jdTemp" />
+    <property name="hibernateTemplate" ref="hbTemp" />
+</bean>	
+
+<bean id="bds" class="org.apache.commons.dbcp.BasicDataSource">    
+    <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    <property name="url" value="jdbc:mysql://localhost:3306/ebank" />
+    <property name="username" value="root" />
+    <property name="password" value="root" />    
+</bean>
+
+<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+ <property name="dataSource" ref="bds" />
+ 
+ <property name="hibernateProperties">
+    <props>
+         <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialectt</prop>
+         <prop key="hibernate.show_sql">true</prop>
+     </props>
+ </property>
+     
+ <property name="annotatedClasses">
+         <list>
+             <value>com.slokam.ebank.pojo.UserPojo</value>
+             <value>com.slokam.ebank.pojo.TransactionPojo</value>
+             <value>com.slokam.ebank.pojo.PassportPojo</value>
+             <value>com.slokam.ebank.pojo.PersonPojo</value>
+             <value>com.slokam.ebank.pojo.PhonePojo</value>
+             <value>com.slokam.ebank.pojo.CoursePojo</value>
+         </list>
+  </property>       
+ </bean>
+    
+ <bean id="hbTemp" class="org.springframework.orm.hibernate3.HibernateTemplate">
+     <property name="sessionFactory" ref="sessionFactory" />
+ </bean>    
+     
+<bean id="adminService" class="com.slokam.ebank.service.AdminService">
+    <property name="adminDAO" ref="adminD" />
+</bean>    
+
+<bean id="adminD" class="com.slokam.ebank.dao.AdminDAO">
+    <property name="sf" ref="sessionFactory" />
+    <property name="jdbcTemplate" ref="jdTemp" />
+</bean>
+<bean id="jdTemp" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource" ref="bds" />
+</bean>   
+
+ <bean id="personService" class="com.slokam.ebank.service.PersonService">
+    <property name="personDAO" ref="personD" />
+</bean>    
+
+<bean id="personD" class="com.slokam.ebank.dao.PersonDAO">
+    <property name="sf" ref="sessionFactory" />
+</bean>
+ 
+
+<bean id="userService" class="com.slokam.ebank.service.UserService">
+    <property name="userDAO" ref="userD" />
+</bean>    
+
+<bean id="userD" class="com.slokam.ebank.dao.UserDAO">
+    <property name="sf" ref="sessionFactory" />
+    <property name="hibernateTemplate" ref="hbTemp" />
+</bean>
+
+</beans>
